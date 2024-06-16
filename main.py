@@ -8,13 +8,7 @@ def alphabet_selection(input_word):
         sym = input_word[i]
         alpha = input_word[i+1]
         selected_alphabet.setdefault(alpha, dict())
-        if sym == '=':
-            selected_alphabet[alpha].setdefault('=', list()).append(i//2)
-            # example: word 'ВАННА' selected_alphabet['а']['='] returns: [1, 4]
-        elif sym == '+':
-            selected_alphabet[alpha].setdefault('+', list()).append(i//2)
-        elif sym == '-':
-            selected_alphabet[alpha].setdefault('-', list()).append(i//2)
+        selected_alphabet[alpha].setdefault(sym, list()).append(i // 2)
     return selected_alphabet
 
 
@@ -26,11 +20,15 @@ def word_selection(selected_alphabet, selected_words):
                     selected_words = list(filter(lambda x: x[index] == key, selected_words))
             elif sym == '+':
                 for index in selected_alphabet[key][sym]:
-                    selected_words = list(filter(lambda x: x[index] != key and len(selected_alphabet[key][sym] + selected_alphabet[key].get('=', list())) == x.count(key), selected_words))
+                    number_alpha = len(selected_alphabet[key][sym] + selected_alphabet[key].get('=', list()))
+                    selected_words = list(filter(lambda x: x[index] != key and number_alpha == x.count(key), selected_words))
             elif sym == '-':
                 for index in selected_alphabet[key][sym]:
                     selected_words = list(filter(lambda x: x[index] != key and not (key in x and len(selected_alphabet[key]) == 1), selected_words))
-                    selected_words = list(filter(lambda x: x[index] != key, selected_words))
+                if len(val.keys()) > 1:
+                    number_alpha = len(selected_alphabet[key].get('+', []) + selected_alphabet[key].get('=', []))
+                    selected_words = list(filter(lambda x: x.count(key) == number_alpha, selected_words))
+
     return selected_words
 
 
