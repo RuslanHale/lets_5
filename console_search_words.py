@@ -35,17 +35,14 @@ def word_selection(selected_alphabet, selected_words):
 
 
 words = words_file.data
+word = input()
 
-
-def find_words(word):
-    pass
-
-# while word != 'stop':
-#     print(word)
-#     alphabet = alphabet_selection(word)
-#     words = word_selection(alphabet, words)
-#     print(words)
-#     word = input('Введите новое слово: ')
+while word != 'stop':
+    print(word)
+    alphabet = alphabet_selection(word)
+    words = word_selection(alphabet, words)
+    print(words)
+    word = input('Введите новое слово: ')
 
 # +П-А-Л-А-Ч
 # -В-Е+П+Р-Ь
