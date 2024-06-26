@@ -2,10 +2,11 @@ import telebot
 from telebot import types
 from search_words import find_words
 import words_file
-with open(r'D:\py_projects\bot_tokens.txt', 'r', encoding='utf-8') as file:
-    token = file.readline()
+from dotenv import load_dotenv
+import os
 
-bot = telebot.TeleBot(token)
+load_dotenv()
+bot = telebot.TeleBot(os.getenv('TOKEN'))
 
 
 session_started = False
@@ -129,4 +130,4 @@ def handle_inline_callback(call):
         session_started = False
 
 
-bot.polling()
+bot.polling(non_stop=True, interval=0)
