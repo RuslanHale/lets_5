@@ -35,6 +35,24 @@ def handle_word(message):
         bot.send_message(message.chat.id, "Пожалуйста, введите слово из 5 букв.")
 
 
+def binary_search(words_list, target):
+    left = 0
+    right = len(words) - 1
+
+    while left <= right:
+        mid = (left + right) // 2
+        mid_word = words_list[mid]
+
+        if mid_word == target:
+            return True
+        elif mid_word < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+
+    return False
+
+
 def show_inline_keyboard(chat_id):
     keyboard = types.InlineKeyboardMarkup()
     symbols = {"=": "🟨", "+": "⬜", "-": "⬛"}
@@ -62,8 +80,11 @@ def show_inline_words_keyboard(chat_id):
         else:
             keyboard.row(types.InlineKeyboardButton(words[i].upper(), callback_data=words[i]))
 
-    bot.send_message(chat_id, "Выберите слово:", reply_markup=keyboard)
-
+    if len(words) > 0:
+        bot.send_message(chat_id, "Выберите слово:", reply_markup=keyboard)
+    else:
+        bot.send_message(chat_id, "В базе нет подходящих вариантов. Возможно вы выбрали некорректные состояния"
+                                  " букв.\nЧтобы начать заново нажмите /start", reply_markup=keyboard)
 
 @bot.callback_query_handler(func=lambda call: True)
 def handle_inline_callback(call):
@@ -71,7 +92,7 @@ def handle_inline_callback(call):
     global letters
     global words
 
-    if call.data in words:
+    if binary_search(words, call.data):
         call.message.text = call.data
         handle_word(call.message)
 
@@ -80,12 +101,13 @@ def handle_inline_callback(call):
         index = int(call.data[0])
         letters[index] = sym_letter
         status = ''
-        if sym_letter[0] == '=':
-            status = 'есть, стоит на своём месте'
-        elif sym_letter[0] == '+':
-            status = 'есть, но стоит не на своём месте'
-        elif sym_letter[0] == '-':
-            status = 'отсутствует'
+        match sym_letter[0]:
+            case '=':
+                status = 'есть, стоит на своём месте'
+            case '+':
+                status = 'есть, но стоит не на своём месте'
+            case '-':
+                status = 'отсутствует'
         bot.answer_callback_query(call.id, text=f'Буква {sym_letter[1]} {status}')
 
     if call.data == 'confirm':
