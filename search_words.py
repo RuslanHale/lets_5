@@ -26,7 +26,7 @@ def word_selection(selected_alphabet, selected_words) -> list:
                 for index in selected_alphabet[key][sym]:
                     number_alpha = len(selected_alphabet[key][sym] + selected_alphabet[key].get('=', list()))
                     selected_words = (
-                        list(filter(lambda x: x[index] != key and number_alpha == x.count(key), selected_words)))
+                        list(filter(lambda x: x[index] != key and number_alpha <= x.count(key), selected_words)))
             elif sym == '-':
                 for index in selected_alphabet[key][sym]:
                     selected_words = (
@@ -34,7 +34,7 @@ def word_selection(selected_alphabet, selected_words) -> list:
                                     selected_words)))
                 if len(val.keys()) > 1:
                     number_alpha = len(selected_alphabet[key].get('+', []) + selected_alphabet[key].get('=', []))
-                    selected_words = list(filter(lambda x: x.count(key) == number_alpha, selected_words))
+                    selected_words = list(filter(lambda x: x.count(key) >= number_alpha, selected_words))
     return selected_words
 
 
