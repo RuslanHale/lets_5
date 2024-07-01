@@ -75,8 +75,12 @@ def show_inline_keyboard(chat_id):
 
 def show_inline_words_keyboard(chat_id):
     keyboard = types.InlineKeyboardMarkup()
-    for i in range(0, len(words), 2):
-        if len(words) - (i+1) > 1:
+    for i in range(0, len(words), 3):
+        if len(words) - (i+1) > 2:
+            keyboard.row(types.InlineKeyboardButton(words[i].upper(), callback_data=words[i]),
+                         types.InlineKeyboardButton(words[i+1].upper(), callback_data=words[i+1]),
+                         types.InlineKeyboardButton(words[i+1].upper(), callback_data=words[i+2]))
+        elif len(words) - (i+1) > 1:
             keyboard.row(types.InlineKeyboardButton(words[i].upper(), callback_data=words[i]),
                          types.InlineKeyboardButton(words[i+1].upper(), callback_data=words[i+1]))
         else:
