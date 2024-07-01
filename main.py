@@ -4,6 +4,7 @@ from search_words import find_words
 import words_file
 from dotenv import load_dotenv
 import os
+import time
 
 load_dotenv()
 bot = telebot.TeleBot(os.getenv('TOKEN'))
@@ -130,4 +131,10 @@ def handle_inline_callback(call):
         session_started = False
 
 
-bot.polling(non_stop=True, interval=0)
+if __name__ == '__main__':
+    while True:
+        try:
+            bot.polling(none_stop=True)
+        except Exception as e:
+            time.sleep(3)
+            print(e)
